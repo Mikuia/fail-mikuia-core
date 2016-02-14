@@ -25,21 +25,19 @@ defaultSettings =
 		address: 'tcp://127.0.0.1:3001'
 
 module.exports = class Settings
-	settings = {}
-
 	read: (callback) =>
 		fs.readFile 'settings.json', (err, data) =>
 			if err
 				log.error cli.whiteBright err
 				log.warning cli.whiteBright 'Can\'t load the settings file, creating a new one.'
 			else
-				settings = tools.parseJson data
+				@settings = tools.parseJson data
 
 			@setDefaults()
-			callback settings
+			callback @settings
 
 	save: ->
-		fs.writeFileSync 'settings.json', JSON.stringify settings, null, '\t'
+		fs.writeFileSync 'settings.json', JSON.stringify(settings, null, '\t')
 
 	set: (category, key, value) ->
 		settings[category][key] = value
@@ -48,8 +46,7 @@ module.exports = class Settings
 
 	setDefaults: ->
 		for category, categoryFields of defaultSettings
-			if not settings[category]?
-				settings[category] = {}
+			settings[category] ?= {}
 			for field, fieldDefaultValue of categoryFields
 				if not settings[category][field]?
 					@set category, field, fieldDefaultValue
