@@ -40,13 +40,13 @@ module.exports = class Settings
 		fs.writeFileSync 'settings.json', JSON.stringify(settings, null, '\t')
 
 	set: (category, key, value) ->
-		settings[category][key] = value
+		@settings[category][key] = value
 		log.info cli.whiteBright('Setting ' + cli.greenBright(category + '.' + key) + ' to ' + cli.yellowBright(value))
 		@save()
 
 	setDefaults: ->
 		for category, categoryFields of defaultSettings
-			settings[category] ?= {}
+			@settings[category] ?= {}
 			for field, fieldDefaultValue of categoryFields
-				if not settings[category][field]?
+				if not @settings[category][field]?
 					@set category, field, fieldDefaultValue
