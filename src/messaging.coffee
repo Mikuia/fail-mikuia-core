@@ -6,8 +6,6 @@ log = require './log'
 tools = require './tools'
 
 module.exports = class Messaging
-	@rep = null
-
 	constructor: (address) ->
 		@rep = zmq.socket 'rep'
 
@@ -19,17 +17,17 @@ module.exports = class Messaging
 		log.info cli.whiteBright('Listening on ') + cli.yellowBright(address)
 
 	parseMessage: (req) =>
-		if req?.method?
-			switch req.method
-				when "getExample"
-					@reply req,
-						type: 'string'
-						message: 'Hatsu123'
-						error: false
-				else
-					console.log 'What the shit are you doing.'
-					@reply req,
-						error: true
+		return unless req?.method?
+		switch req.method
+			when "getExample"
+				@reply req,
+					type: 'string'
+					message: 'Hatsu123'
+					error: false
+			else
+				console.log 'What the shit are you doing.'
+				@reply req,
+					error: true
 
 	reply: (req, res) =>
 		@rep.send JSON.stringify _.extend(req, res)
