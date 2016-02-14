@@ -15,10 +15,7 @@ module.exports =
 		output = moment().format('HH:mm:ss') + ' '
 
 		if status?
-			if color?
-				output += '[' + color(status) + '] '
-			else
-				output += '[' + status + '] '
+			output += "[#{color?(status) ? status}]"
 
 		if category
 			output += category + ' / '
