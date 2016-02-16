@@ -5,7 +5,9 @@ log = require './src/log'
 
 Chat = require './src/chat'
 Messaging = require './src/messaging'
+Models = require './src/models'
 Settings = require './src/settings'
+Twitch = require './src/twitch'
 
 # This code is trash.
 
@@ -25,5 +27,6 @@ settings.read (data) =>
 	db.on 'error', (err) =>
 		log.fatal 'Redis', 'Error: ' + err
 
+	models = new Models db
 	msg = new Messaging config.zeromq.address
-	chat = new Chat config.bot, db
+	chat = new Chat config.bot, models
