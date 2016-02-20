@@ -23,6 +23,7 @@ settings.read (data) =>
 	db = redis.createClient config.redis.port, config.redis.host, config.redis.options
 	db.on 'ready', =>
 		log.info 'Redis', 'Connected.'
+		db.select config.redis.db
 
 	db.on 'error', (err) =>
 		log.fatal 'Redis', 'Error: ' + err
