@@ -11,11 +11,11 @@ module.exports =
 		if !message?
 			message = category
 			category = null
-			
+
 		output = moment().format('HH:mm:ss') + ' '
 
 		if status?
-			output += "[#{color?(status) ? status}]"
+			output += "[#{color?(status) ? status}] "
 
 		if category
 			output += category + ' / '
