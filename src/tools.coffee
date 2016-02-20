@@ -10,11 +10,8 @@ module.exports =
 		return channel
 
 	parseJson: (json) =>
-		jsonData = null
-
 		try
-			jsonData = JSON.parse json
+			JSON.parse json
 		catch e
 			log.error 'Oh come on, that\'s not even a proper JSON message!'
-
-		return jsonData
+			null
