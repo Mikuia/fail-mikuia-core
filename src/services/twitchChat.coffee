@@ -55,12 +55,13 @@ module.exports = class TwitchChat extends Chat
 	join: (channel, callback) =>
 		channel = @models.getTwitchChannel channel
 
-		console.log 'Channel name is ' + channel.getName()
-		channel.isStreamer (err, answer) =>
-			console.log 'err: ' + err
-			console.log 'answer: ' + answer
-
-		@clients[0].join 'hatsuney'
+		channel.isPrioritized (err, prioritized) =>
+			if prioritized
+				@spawnConnection channel.getName(), 'main', (err, client) =>
+					client.join channel.getName()
+			else
+				# todo: "load balancing"
+				@clients[0].join channel.getName()
 
 	spawnConnection: (id, type, callback) =>
 		client = new tmi.client
@@ -95,6 +96,14 @@ module.exports = class TwitchChat extends Chat
 		client.on 'disconnected', (reason) =>
 			log.error 'Twitch', logHeader + cli.whiteBright(' Disconnected. ' + reason)
 			client.connect()
+
+		client.on 'join', (channel, username) =>
+			if username is @config.name.toLowerCase()
+				 log.info 'Twitch', logHeader + cli.whiteBright('/ ') + cli.cyanBright(channel) + cli.whiteBright(' / Joined the channel.')
+
+		client.on 'part', (channel, username) =>
+			if username is @config.name.toLowerCase()
+				log.info 'Twitch', logHeader + cli.whiteBright('/ ') + cli.cyanBright(channel) + cli.whiteBright(' / Left the channel.')
 
 		# if type == 'main'
 		# 	# client.on('message')
