@@ -1,10 +1,11 @@
 BaseModel = require('./base')
 
 module.exports = class Channel extends BaseModel
-	@model = 'channel'
-
 	constructor: (@name, @db) ->
+		@model = 'channel'
 		# Woop
+
+	getName: -> @name
 
 	isBanned: (cb) -> @db.sismember 'mikuia:banned', @name, cb
 	isBot: (cb) -> @db.sismember 'mikuia:bots', @name, cb

@@ -3,11 +3,11 @@ redis = require 'redis'
 
 log = require './src/log'
 
-Chat = require './src/chat'
 Messaging = require './src/messaging'
 Models = require './src/models'
 Settings = require './src/settings'
-Twitch = require './src/twitch'
+
+TwitchChat = require './src/services/twitchChat'
 
 # This code is trash.
 
@@ -29,4 +29,7 @@ settings.read (data) =>
 
 	models = new Models db
 	msg = new Messaging config.zeromq.address
-	chat = new Chat config.bot, models
+
+	if config.twitch.enabled
+		twitchChat = new TwitchChat config.twitch, models
+		twitchChat.connect()

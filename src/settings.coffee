@@ -5,7 +5,8 @@ log = require './log'
 tools = require './tools'
 
 defaultSettings =
-	bot:
+	twitch:
+		enabled: true
 		admins: [
 			'hatsuney'
 		]
